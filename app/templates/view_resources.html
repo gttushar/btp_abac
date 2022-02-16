@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<legend class="border-bottom mb-4"> View Resources </legend>
+<br><br><br>
+<table class="table table-hover table-striped table-responsive thead-dark">
+    <th> Resource name </th>
+    {% for resource in resources %}
+        <tr><td> {{ resource.resource_name }}  </td></tr>
+                <!-- <p class="font-weight-bold">Brand: </p>
+                <p class="font-weight-bold">Price: Rs. </p>
+                <p class="text-break">Description: </p> --> 
+    {% endfor %}  
+</table>
+    <!-- <div class="row">
+        <div class="col-md-1">
+            <h4>      </h4>
+        </div>
+        <div class="col-md-1">
+            <a href="" class='btn btn-primary btn-sm'> 
+                <span class="fas fa-plus"></span> 
+            </a>
+        </div>
+    </div> -->
+{% endblock content %}

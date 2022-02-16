@@ -1,0 +1,4 @@
+1:IIT Kharagpur:PPEGKfx0EdASTw5nw1p3xylCx3BD5xbVv4Tuy5gkiAI=:Tc8nRD599xohVYlGasKmBhyKZLjEQfcUEPROhs87Bl0=
+2:IIT Kanpur:6uFXS8YJg/K5BpJw4WdrqhDNjF4rMMcisIhY376UhBY=:Ns8mJRlmsl194hhxkRvUX0UcdN+/p1D8PQvhMFlU/nM=
+3:Jadavpur University:JrTZVzV61ywoQW77Vxx/U8bcg1VkIvDNQgsUyrTvBxk=:MkidyFrzOPVkZ2AcN/qCIxlv1u+f7/HEUMwQQB8jRWQ=
+4:IIT Bombay:lyCQdXd0OWR5B8e2uJPb7O52ZmM8dG9nb5i5fnGdp0g=:ckA3HDjUAAduOVKdoNaomQUNCyM8LNycxVuwU/wN5b8=

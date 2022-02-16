@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>Hi, {{ current_user.user_name }} !</h1> 
+	{% if session['admin'] %}
+		<a href = "{{ url_for('add_attribute') }}">   Add valid attribute			</a> <br>
+		<a href = "{{ url_for('add_aval') }}"> 		  Add valid attr-val			</a> <br>
+		<a href = "{{ url_for('add_resource') }}">    Add a resource 				</a> <br>
+		<a href = "{{ url_for('update_resource') }}"> Update resource details 		</a> <br>
+		<a href = "{{ url_for('register_user') }}">   Register a new user			</a> <br>
+		<a href = "{{ url_for('update_user') }}">     Update user details 			</a> <br>
+		<a href = "{{ url_for('add_policy') }}">      Add policy 					</a> <br>
+	{% endif %}
+	<a href = "{{ url_for('view_resources') }}"> View available resources </a>   <br>
+	<a href = "{{ url_for('access_resource_user') }}"> Access a resource  </a>   <br>
+
+{% endblock %}

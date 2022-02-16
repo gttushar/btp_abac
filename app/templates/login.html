@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    <div class="login_form">
+            
+            <div class="text-center">
+                <legend class="border-bottom mb-4">Log In</legend>
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <div class="form-group">
+                            {{ form.login_id.label(class="form-control-label") }}<br>
+                            {{ form.login_id(size=32) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.login_id.errors %} 
+                                    <span style="color:white;">[{{error}}]</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form.pwd.label(class="form-control-label") }}<br>
+                            {{ form.pwd(size=32) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.pwd.errors %} 
+                                    <span style="color:white;">[{{error}}]</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                    <!-- <div class="border-top pt-3">
+                        <small class="text-white">
+                        Don't have an account ?<br>
+                            <a href = "{{ url_for('register_user') }}"> Register </a>     <br>
+                        </small>
+                    </div> -->
+                    <a href = "{{ url_for('access_resource_non_user') }}"> Access resource for external users </a> <br>
+                    
+                    </form>
+            
+            </div>
+        
+    </div>
+{% endblock content %}

@@ -1,0 +1,1170 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.semanticweb.org/tushar/ontologies/2021/abac#"
+     xml:base="http://www.semanticweb.org/tushar/ontologies/2021/abac"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasAssistantProfessor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasAssistantProfessor">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasProfessor"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasAssociateProfessor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasAssociateProfessor">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasProfessor"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasCourse -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasCourse">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasEmployee -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasEmployee">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#OrganisationType"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasFaculty -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasFaculty">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasEmployee"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasProfessor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasProfessor">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasFaculty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasStudent -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasStudent">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#isStudentAt"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasVisitingProfessor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasVisitingProfessor">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasProfessor"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isAssistantProfessorAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isAssistantProfessorAt">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#isProfessorAt"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isAssociateProfessorAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isAssociateProfessorAt">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#isProfessorAt"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isCourseOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isCourseOf">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasCourse"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isEmployeeAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isEmployeeAt">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#OrganisationType"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasEmployee"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isFacultyAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isFacultyAt">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasFaculty"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#isEmployeeAt"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isJuniorTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isJuniorTo">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#isSeniorTo"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isParentClassOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isParentClassOf">
+        <owl:inverseOf rdf:resource="&rdfs;subClassOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isParentCourseOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isParentCourseOf">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#isSpecialisationOf"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isProfessorAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isProfessorAt">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#isFacultyAt"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isSeniorTo -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isSeniorTo"/>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isSpecialisationOf -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isSpecialisationOf"/>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isStudentAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isStudentAt">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Student"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isStudiedBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isStudiedBy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isTaughtBy -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isTaughtBy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#isVisitingProfessorAt -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#isVisitingProfessorAt">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#isProfessorAt"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#studies -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#studies">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#PGStudent"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Student"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#UGStudent"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#teaches -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#teaches">
+        <rdfs:range rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasName -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasName"/>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#hasYearOfStudy -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#hasYearOfStudy">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Student"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicOrganisation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#OrganisationType"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeEmployee"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicUnits -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicUnits"/>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeEmployee"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#College -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#College">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicUnits"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeEmployee -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeEmployee">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Employee"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeOfEngineering -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeOfEngineering">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#College"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeOfHumanities -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeOfHumanities">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#College"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeOfLiberalArts -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CollegeOfLiberalArts">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#College"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Course -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Department -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Designation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Designation">
+        <owl:equivalentClass rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Role"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Employee -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Employee">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Designation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Faculty -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Faculty">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicUnits"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfBiotechnology -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfBiotechnology">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Faculty"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Faculty"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfHumanities -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfHumanities">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Faculty"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfInterdisciplinarySciences -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfInterdisciplinarySciences">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Faculty"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfSciences -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfSciences">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Faculty"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Intern -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Intern">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Student"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#OrganisationType -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#OrganisationType"/>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#PGStudent -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#PGStudent">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Student"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Role -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Role"/>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#School -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#School">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicUnits"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolEmployee -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolEmployee">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Employee"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfBasicSciences -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfBasicSciences">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfBusiness -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfBusiness">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfComputingandElectricalEngineering -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfComputingandElectricalEngineering">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfEducation -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfEducation">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfEngineering -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfEngineering">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfHumanities -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfHumanities">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfLaw -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfLaw">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfManagement -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfManagement">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfMedicine -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolOfMedicine">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#School"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Student -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Student">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Designation"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#UGStudent -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#UGStudent">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Student"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademyofClassicalandFolkArts -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademyofClassicalandFolkArts">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfInterdisciplinarySciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AdvancedTechnologyDevelopmentCentre -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdvancedTechnologyDevelopmentCentre">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfInterdisciplinarySciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AerospaceEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AerospaceEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AgricultureEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AgricultureEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AssistantProfessor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AssistantProfessor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Professor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AssistantRegistrar -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AssistantRegistrar">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Registrar"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AssociateDean -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AssociateDean">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#DeanUg"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#AssociateProfessor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#AssociateProfessor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Professor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#BioScience -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#BioScience">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfBiotechnology"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Biotechnology -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Biotechnology">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfBiotechnology"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Circuital"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS30002 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS30002">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS31003 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS31003">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS31005 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS31005">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS31006 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS31006">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS39002 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS39002">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS39003 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS39003">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS39006 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS39006">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS60002 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS60002">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS60003 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS60003">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CS60050 -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS60050">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Course"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CSE -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CSE">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CSIT -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CSIT">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#IT"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CenterforRuralDevelopment -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CenterforRuralDevelopment">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfHumanities"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Chancellor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Chancellor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#ChemicalEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#ChemicalEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Chemistry -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Chemistry">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfSciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Circuital -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Circuital">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CivilEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CivilEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#ComputerScienceandEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#ComputerScienceandEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Coordinator -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Coordinator">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolEmployee"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Principal"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#CryogenicEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#CryogenicEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfInterdisciplinarySciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#DeanStudentAffairs -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#DeanStudentAffairs">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#DeanUg"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#DeanUg -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#DeanUg">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#DeputyDirector -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#DeputyDirector">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Director"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#DeputyPrincipal -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#DeputyPrincipal">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolEmployee"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Principal"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Director -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Director">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#EC -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#EC">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Circuital"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#EE"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#ECE -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#ECE">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#EC"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#EE -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#EE">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Circuital"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#ElectricalEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#ElectricalEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#ElectronicsandElectricalCommunicationEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#ElectronicsandElectricalCommunicationEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#EmeritusProfessor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#EmeritusProfessor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#EnergyScienceandEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#EnergyScienceandEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#GeologyandGeophysics -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#GeologyandGeophysics">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfSciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#HallManager -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#HallManager">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Warden"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#HumanitiesandSocialSciences -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#HumanitiesandSocialSciences">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfHumanities"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#IE -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#IE">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#EE"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#IT -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#IT">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Non-Circuital"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#IndustrialandSystemsEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#IndustrialandSystemsEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfInterdisciplinarySciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#ME -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#ME">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Non-Circuital"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#MI -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#MI">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#ME"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#MNC -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#MNC">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#CS"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Maths"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#MT -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#MT">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#ME"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Mathematics -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Mathematics">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfSciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Maths -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Maths">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+        <isSpecialisationOf rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Non-Circuital"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#MechanicalEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#MechanicalEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#MentorProfessor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#MentorProfessor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#MiningEngineering -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#MiningEngineering">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#NanoScienceandTechnology -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#NanoScienceandTechnology">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfInterdisciplinarySciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Non-Circuital -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Non-Circuital">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Department"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#OceanEngineeringandNavalArchitecture -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#OceanEngineeringandNavalArchitecture">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfEngineering"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Physics -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Physics">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#FacultyOfSciences"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Principal -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Principal">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolEmployee"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Professor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Professor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Registrar -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Registrar">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#ResearchAssistant -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#ResearchAssistant">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Teacher -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Teacher">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#SchoolEmployee"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#ViceChancellor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#ViceChancellor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#VisitingProfessor -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#VisitingProfessor">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AcademicStaff"/>
+        <isJuniorTo rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#Professor"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/tushar/ontologies/2021/abac#Warden -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/tushar/ontologies/2021/abac#Warden">
+        <rdf:type rdf:resource="http://www.semanticweb.org/tushar/ontologies/2021/abac#AdministrativeStaff"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.4.2) http://owlapi.sourceforge.net -->
+

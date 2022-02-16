@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    <div class="login_form">
+            
+            <div class="text-center">
+                <legend class="border-bottom mb-4"> Add a Resource </legend>
+                <form action="" method="post" novalidate>
+                    {{ form.hidden_tag() }}
+                    <fieldset class="form-group">
+                        <div class="form-group">
+                            {{ form.resource_name.label(class="form-control-label") }}<br>
+                            {{ form.resource_name(size=32) }}
+                            <div class="invalid-feedback">
+                                {% for error in form.resource_name.errors %} 
+                                    <span style="color:white;">[{{error}}]</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </form>
+            
+            </div>
+        
+    </div>
+{% endblock content %}

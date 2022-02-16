@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %} 
+<div class="login_form">
+    <div class="text-left">
+        <legend class="border-bottom mb-4">Update User</legend>
+        <form action="" method="post" novalidate>
+            {{ form.hidden_tag() }}
+        <div class="input-group mb-4 input-group-md">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Enter login name / email</span>
+            </div>
+            {{ form.login_name(class_="form-control",size=64) }} <br>
+            <!-- {% for error in form.login_name.errors %} 
+            <span style="color:red;">[{{error}}]</span>
+            {% endfor %}  unique login name check in reg form  -->
+        </div>
+        <p>{{ form.submit_id(class="btn btn-outline-info", placeholder="Check user") }}</p>
+    {% if form.login_name.data %}
+    <div class="card text-left">
+        <div class="card-body">
+            <table class="table table-hover table-striped table-responsive table-bordered"> 
+                <tr> <td>Name :      </td> <td><span style="color:green;">{{ form.user_name(readonly=true) }} </span></td> </tr>
+                <tr> <td>Login Name :</td> <td><span style="color:green;">{{ form.login_name(readonly=true) }}</span></td> </tr>
+                <tr> <td>Email :     </td> <td><span style="color:green;">{{ form.email(readonly=true) }}     </span></td> </tr>
+            </table>
+
+            <table class="table table-hover table-striped table-responsive table-bordered"> 
+                <tr> <td> Attribute </td> <td> Value </td> </tr>
+                {% for aval_form in form.details %} 
+                <tr>
+                    {% if aval_form.attribute_id.data %}
+                        <td> {{ aval_form.attribute(class_="form-control", size=64, readonly=true) }} </td>
+                        <td> {{ aval_form.val(class_="form-control", size=64, readonly=true) }} </td>
+                        <td>
+                            <div class="input-group mb-4 input-group-md">
+                                {{ aval_form.new_val(class_="form-control",size=64) }}
+                            </div>
+                        </td>
+                        <td> {{ aval_form.attribute_id(class_="form-control", size=5, readonly=true, type="hidden") }} </td>
+                    {% else %}
+                    <fieldset class="form-group">
+                        <td><div class="input-group mb-4 input-group-md">
+                            {{ aval_form.attribute(class_="form-control",size=64, placeholder="Attribute") }}
+                            {% for error in aval_form.attribute.errors %} 
+                            <span style="color:red;">[{{error}}]</span>
+                            {% endfor %}
+                        </div></td>
+                        <td><div class="input-group mb-4 input-group-md">
+                            {{ aval_form.val(class_="form-control",size=64, placeholder="Value") }}
+
+                            <div class="invalid-feedback">
+                                {% for error in aval_form.val.errors %} 
+                                <span style="color:red;">[{{error}}]</span>
+                                {% endfor %}
+                            </div>
+                        </div></td>
+                    </fieldset>
+                    {% endif %}
+                </tr>
+                    {% for error in aval_form.new_val.errors %} 
+                        <tr> 
+                            <td> {{ aval_form.attribute.data }} </td>
+                            <td> <span style="color:red;">[{{error}}]</span> </td> 
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+
+            </table>
+            
+            <table class="table table-hover table-striped table-responsive "> 
+                <tr>{{ form.add_aval(class="btn btn-outline-info") }}</tr>
+
+            </table>
+        </div>
+    </div>
+        <br><br>
+        <p>{{ form.submit(class="btn btn-outline-info", placeholder="Update user") }}</p>
+    {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <legend class="border-bottom mb-4">Request access : {{ user_name }}</legend> <br> <br>
+    <form action="/access_resource_user" method="post" enctype = "multipart/form-data">
+        <div class="form-group">
+            <table width="100%" class="table table-hover table-responsive table-bordered" style="table-layout:fixed;">
+                <tr> <td>
+                <div class="input-group mb-4 input-group-md">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Choose Resource</span>
+                    </div>
+                    <SELECT name = "resource_id">
+                        {% for resource in resources %}      
+                            <OPTION value = "{{ resource.resource_id }}"> {{ resource.resource_name }} </OPTION>
+                        {% endfor %}
+                    </SELECT>
+                </div>
+                </td> </tr>
+                <tr> <td style="text-align: center;"> <input type = "submit" name = "submit" /> </td> </tr>
+            </table>
+        </div>
+    </form>
+
+    {% if message is defined %}
+        {% if message.find('not allowed') != -1 %}     <!-- You are not allowed to access this object -->
+            <div class="bg-danger"> {{ message }} </div>
+        {% else %}
+            <div class="bg-success"> {{ message }} </div>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

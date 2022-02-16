@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %} 
+    <br>
+    <h3> User Profile - {{ user.user_name }} </h3>
+    <br>
+    <div class="card text-left">
+        <div class="card-body">
+<table class="table table-hover table-striped table-responsive "> 
+    <tr> <td> Name :       </td> <td> <span style="color:green;"> {{ user.user_name }}  </span> </td> </tr> 
+    <tr> <td> Login Name : </td> <td> <span style="color:green;"> {{ user.login_name }} </span> </td> </tr>    
+    <tr> <td> Email :      </td> <td> <span style="color:green;"> {{ user.email }}      </span> </td> </tr>
+    <tr> <td></td> </tr>
+    {% for aval in user_details %}
+    <tr> <td> {{ aval.user_attribute }} : </td> <td><span style="color:green;"> {{ aval.user_val }} </span></td> </tr>
+    {% endfor %}
+</table>
+        </div>
+    </div>
+
+{% endblock content %}

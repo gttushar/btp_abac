@@ -1,0 +1,36 @@
+Title: Register User
+Description: Add a user to the system
+Actors: Existing user with user type = admin
+Interaction: Enter id, password, email, name, login name, and details(as aval) of a new user
+Post conditions: The new user is added to the system and can now log in with their credentials
+
+Title: View resources
+Description: View the resources available for access in the system 
+Actors: Users and external access requesters
+Interaction: 
+Post conditions:
+
+Title: Add resource
+Description: Add a resource and its properties 
+Actors: Existing user with user type = admin
+Interaction: Enter name and properties of resource
+Post conditions: The new resource is added to the system. Can be accessed according to the set policy
+
+Title: Access resource (user)
+Description: Make access request for a resource
+Actors: Existing users in the system
+Interaction: 
+Users can make a request to access some resource. 
+The policy is evaluated using the user attribute-values available in the system 
+Post conditions: Access is either granted or rejected
+
+Title: Access resource (external user)
+Description: Make access request for a resource
+Actors: External entity/user (not a part of the system)
+Interaction:
+External users can request access to a resource in the system using their attribute-value 
+pairs issued as a digital signature by their institution/organisation. The digital signature is 
+decrypted. On failure, the request is rejected. On success, the attribute-value pairs are mapped to 
+pairs which are defined in our system. Then, these mapped values are used in evaluating the policy 
+and granting/rejecting access
+Post conditions: Access is either granted or rejected
