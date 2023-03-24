@@ -59,7 +59,7 @@ def decrypt_for_user(receiver_private:str, sender_public:str, message:str) -> st
 
 # create_keys()
 import os, sys
-filename = sys.argv[1]
+filename = 'examples/' + sys.argv[1]
 filename_signed = filename + '_signed.txt'
 filename = filename + '.txt'
 example = open(os.path.join(os.path.dirname(__file__), '../' + filename), 'r')

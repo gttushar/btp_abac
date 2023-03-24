@@ -1,0 +1,5 @@
+create repo then connect:
+git remote add origin https://gttushar:<token>@github.com/gttushar/btp_abac.git
+
+get current branch:
+git rev-parse --abbrev-ref HEAD                              

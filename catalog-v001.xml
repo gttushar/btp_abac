@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
+        <uri id="Automatically generated entry, Timestamp=1663268879004" name="http://triplr.org/rdf/bloody-byte.net/rdf/dc_owl2dl/dc.ttl" uri="venv/Lib/site-packages/owlready2/ontos/dc.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1663268879004" name="http://triplr.org/rdf/bloody-byte.net/rdf/dc_owl2dl/dcam.ttl" uri="venv/Lib/site-packages/owlready2/ontos/dcam.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1663268879004" name="http://triplr.org/rdf/bloody-byte.net/rdf/dc_owl2dl/dcmitype.ttl" uri="venv/Lib/site-packages/owlready2/ontos/dcmitype.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1663268879004" name="http://triplr.org/rdf/bloody-byte.net/rdf/dc_owl2dl/dcterms.ttl" uri="venv/Lib/site-packages/owlready2/ontos/dcterms.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1663268879004" name="http://www.semanticweb.org/tushar/ontologies/2021/abac" uri="abac.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1663268879004" name="http://www.w3.org/2002/07/owl" uri="venv/Lib/site-packages/owlready2/ontos/owlready_ontology.owl"/>
+    </group>
+</catalog>

@@ -2,13 +2,16 @@
 
 {% block content %}
     <h3>Request access</h3>
-    <form action="/access_resource_non_user" method="post" enctype = "multipart/form-data">
-        <div class="form-group">
-            <table class="table table-hover table-striped table-responsive table-bordered">
+    <table class="table table-hover table-striped table-responsive table-bordered" style="border-style : hidden!important;">
+        <form action="/access_resource_non_user" method="post" enctype = "multipart/form-data">
+            <div class="form-group">
                 <tr>
-                    <div class="input-group mb-4 input-group-md">
-                        <div class="input-group-prepend"><span class="input-group-text">Select your Organisation</span></div>
-                        <SELECT name = "org_id">
+                    <div class="input-group input-group-md">
+                    <td>
+                        <div class="input-group-prepend"><span class="input-group-text" style="width: 200px; background-color: white;">Select your Organization</span></div>
+                    </td>
+                    <td>
+                        <SELECT name = "org_id" style="width: 200; height: 37">
                             <OPTION value = "" selected diabled hidden> Select </OPTION>
                             {% for org in orgs %}      
                                 {% if org.org_id == 2 %}
@@ -18,37 +21,56 @@
                                 {% endif %}
                             {% endfor %}
                         </SELECT>
+                    </td>
                     </div>
                 </tr>
                 <tr>
-                    <div class="input-group mb-4 input-group-md">
-                        <div class="input-group-prepend"> <span class="input-group-text">Choose Resource</span> </div>
-                        <SELECT name = "resource_id">
+                    <div class="input-group input-group-md">
+                    <td>
+                            <div class="input-group-prepend"> <span class="input-group-text" style="width: 200px;">Choose Resource</span> </div>
+                    </td>
+                    <td>
+                        <SELECT name = "resource_id" style="width: 200; height: 37">
                             {% for resource in resources %}      
                                 <OPTION value = "{{ resource.resource_id }}"> {{ resource.resource_name }} </OPTION>
                             {% endfor %}
                         </SELECT>
+                    </td>
                     </div>                
                 </tr>
                 <tr>
-                    <div class="input-group mb-4 input-group-md">
-                        <div class="input-group-prepend"> <span class="input-group-text">Choose Resource</span> </div>
-                        <input type = "file" name = "digital_signature" />  
+                    <td>
+                    <div class="input-group input-group-md">
+                        <div class="input-group-prepend"> <span class="input-group-text" style="width: 200px; background-color: white;">Upload Digital Signature</span> </div>
+                    </td>
+                    <td>
+                        <input type = "file" name = "digital_signature" style="width: 300; height: 37"/>  
                     </div>  
+                    </td>
                 </tr>
-                <tr> <input type = "submit" name = "submit" />  </tr>
-            </table>
-        </div>
-    </form>
-
-    {% if message is defined %}
-        <!-- You are not allowed to access this object -->
-        <!-- {% if message.find('not allowed') != -1 %}     
-            <div class="bg-danger"> {{ message }} </div>
-        {% else %}
-            <div class="bg-success"> {{ message }} </div>
-        {% endif %} -->
-        <div style="white-space:pre-wrap"> {{ message }} </div>
-    {% endif %}
+                <tr> <td style="text-align:center" colspan="2"> <input type = "submit" name = "submit" value = "Submit request" /> </td> </tr>
+            </div>
+        </form>
+        {% if user_aval is defined %}
+            <tr> 
+                <td colspan="2" style="border: 5px solid black; white-space:pre-wrap"><u>User &lt;attribute:value&gt; pairs: </u><br><b>{{ user_aval }}</b>
+                </td>
+            </tr>
+        {% endif %}
+        <tr> 
+            {% if message is defined %}
+                {% if message.find('not allowed') != -1 or message.lower().find('denied') != -1 %}    <!-- You are not allowed to access this object -->
+                    <td colspan="2" style="border: 5px solid red;"><pre>{{ message }}</pre></td>
+                {% else %}
+                    <td colspan="2" style="border: 5px solid green;"><pre>{{ message }}</pre></td>
+                {% endif %}
+            {% endif %}
+        </tr>
+        <tr> 
+            {% if execution_time is defined %}
+                <td colspan="2" style="border: 5px solid grey;">Execution time : <b>{{ execution_time }}</b> s</td>
+            {% endif %}
+        </tr>
+    </table>
 
 {% endblock %}

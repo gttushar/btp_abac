@@ -1,14 +1,13 @@
 from flask import render_template, redirect, url_for, flash, request, session, abort, get_flashed_messages
 from sqlalchemy import func, text, and_, or_
 from flask_login import current_user,login_user, logout_user, login_required
+from flask_mail import Mail, Message
 from wtforms import StringField
 from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 
-from datetime import datetime
-import sys
-import os
+import datetime, sys, os, time, random
 
 from app.forms import *
 from app.models import *
@@ -49,7 +48,9 @@ def login():
 		session['user_id'] = user.user_id
 		session['user_name'] = user.user_name
 		session['user_type'] = 'user'
-		if user_type_detail is not None and user_type_detail['user_val'].lower() == 'admin':
+		print ("details = ", user_type_detail)
+		if user_type_detail is not None and user_type_detail[4].lower() == 'admin':  # 4 = index of user_val string
+			print('Hello admin !!! ')
 			session['admin'] = True
 		else:
 			session['admin'] = False
@@ -424,20 +425,20 @@ def check_env(env_id, env_val):
 	if not env_id:
 		return 1
 	now = datetime.datetime.now()
-	# day type (weekday / weekend)
-	if env_id == 1 and (env_val=='weekday' and now.weekday() < 5 or env_val=='weekend' and now.weekday() > 4):
-		return 1
-	# time type (day / night)
-	if env_id == 2 and (env_val=='day' and now.hour >= 6 and now.hour < 18 or \
-						env_val=='night' and (now.hour < 6 or now.hour >= 18)):
-		return 1
+	# weekday  (1(true) or 0(false))
+	if env_id == 1:	# return 1 if env_val is satisfied else 0
+		return (1 if bool(env_val) == (now.weekday() < 5) else 0)
+	# office_hours (8am to 5pm) (1(true) or 0(false))
+	if env_id == 2:	# return 1 if env_val is satisfied else 0
+		return (1 if bool(env_val) == (now.weekday() < 5 and now.hour >= 8 and now.hour < 17) else 0)
+
 	return 0
 
 def get_env():
 	now = datetime.datetime.now()
 	env = {}
-	env['day'] = 'weekday' if now.weekday() < 5 else 'weekend'
-	env['time'] = 'day' if (now.hour >= 6 and now.hour < 18) else 'night'
+	env['weekday'] = '1' if now.weekday() < 5 else '0'
+	env['office_hours'] = '1' if (now.hour >= 8 and now.hour < 17) else '0'
 	return env
 
 
@@ -449,37 +450,112 @@ def access_resource_user():
 	# print('On page access_resource_user', file=sys.stderr, flush=True)
 
 	resources = Resource.query.all()
+
+	if request.method == "POST" and 'send_otp' in request.form:
+		app.config["MAIL_SERVER"]   = 'iitkgpmail.iitkgp.ac.in'
+		app.config["MAIL_PORT"]     = 465
+		app.config["MAIL_USERNAME"] = 'gupta.tushar@iitkgp.ac.in'
+		app.config['MAIL_PASSWORD'] = 'Abcd@1234'
+		app.config['MAIL_USE_TLS']  = False
+		app.config['MAIL_USE_SSL']  = True
+		mail = Mail(app)  
+		otp = random.randint(100000,999999)
+		session['otp'] = otp
+		# user_email = User.query.filter_by(user_id=session['user_id']).first().email
+		# currently using same email for all users
+		user_email = 'thetushar.g14@gmail.com'
+		msg = Message('OTP',sender = app.config["MAIL_USERNAME"], recipients = [user_email])
+		msg.body = 'OTP for verification : ' +  str(otp)
+		mail.send(msg)
+		print("request.form['resource_id'] =", request.form['resource_id'])
+		print('OTP sending success !')
+		# message = 'Operations allowed on \'mechanics.pdf\' = \'read\', \'write\''
+		return render_template('access_resource_user.html', resources=resources, sent_otp=True, selected_resource=request.form['resource_id'])
+
 	
-	if request.method == "POST":
+	elif request.method == "POST":
 		# print('Access request', file=sys.stderr, flush=True)
 		user_id = session['user_id']
 		user_name = User.query.filter_by(user_id=user_id).first().user_name
 		user_details = User_details.query.filter_by(user_id=user_id).all()
+		user_aval_list = []
+		user_data = 'Name: ' + user_name + '\n'
+		for row in user_details:
+			user_data += User_attributes.query.filter_by(user_attribute_id=row.user_attribute_id).first().user_attribute \
+						+ ': ' + row.user_val + '\n'
+		user_data = user_data[:-1]
+
+		start_time = datetime.datetime.now()
+
+		runQuery = SparqlQueries()
+		for row in user_details:
+			val = row.user_val
+			val_list = list(set(runQuery.ancestor_search(val) +	runQuery.descendant_search(val)))
+			user_aval_list.append({ 'user_attribute_id': row.user_attribute_id, 'user_val': val_list })
 		# user_aval_dict = {}
 		# for aval in user_aval_list:
 		# 	user_aval_dict[aval['attribute']] = aval['val']
 		# if user_id == 3:
 			# return render_template('access_resource_user.html', resources=resources, message='Sorry, you are not allowed to access \'galvin.pdf\'', user_name=user_name)
 
+		otp_matched = False
+		if 'otp' in request.form:
+			if int(session['otp']) == int(request.form['otp']):
+				print('Otp matched !!')
+				otp_matched = True
+			session.pop('otp',None)
+
 		resource_id = request.form['resource_id']
 		resource = Resource.query.filter_by(resource_id=resource_id).first()
 		resource_details = Resource_details.query.filter_by(resource_id=resource_id).all()
 
-		policy_list = Policy.query.join(Operations).filter(Policy.operation_id == Operations.operation_id) \
-					 .outerjoin(Policy_user_aval, Policy.policy_id == Policy_user_aval.policy_id) \
-					 .outerjoin(Policy_resource_aval, Policy.policy_id == Policy_resource_aval.policy_id) \
-					 .outerjoin(Policy_env_aval, Policy.policy_id == Policy_env_aval.policy_id) \
-					 .with_entities(Policy.policy_id, Operations.operation_id, Operations.operation_name, \
-									Policy_user_aval.user_attribute_id, Policy_user_aval.user_val, \
-									Policy_resource_aval.resource_attribute_id, Policy_resource_aval.resource_val, \
-									Policy_env_aval.env_attribute_id, Policy_env_aval.env_val) \
-					 .all()
-
-		# print('policy list = ', file=sys.stderr)
-		# for policy in policy_list:
-		# 	print(policy, file=sys.stderr)
-
 		allowed_operations = dict()		# operation_id : operation_name
+
+		policies = Policy.query.join(Operations, Operations.operation_id==Policy.operation_id) \
+					.with_entities(Policy.policy_id, Operations.operation_id, Operations.operation_name).all()
+		# for policy in policies:
+		# 	print('policy = ', end=' ');	print(policy);
+		for policy in policies:
+			policy_user_aval_list = Policy_user_aval.query.filter_by(policy_id=policy.policy_id).all()
+			policy_resource_aval_list = Policy_resource_aval.query.filter_by(policy_id=policy.policy_id).all()
+			policy_env_aval_list = Policy_env_aval.query.filter_by(policy_id=policy.policy_id).all()
+			user_aval_valid = 0
+			resource_aval_valid = 0
+			env_aval_valid = 0
+			for policy_aval in policy_user_aval_list:
+				match = 0
+				for aval in user_aval_list:
+					# print('policy_aval.user_val = ' + policy_aval.user_val + 'aval[\'user_val\'] = ',end=' ')
+					# print(aval['user_val'])
+					if policy_aval.user_val in aval['user_val']:
+						match += 1
+				if match > 0:
+					user_aval_valid += 1
+				# print('policy_aval = ',end=''); print(policy_aval); print('match = ' + str(match));
+			for policy_aval in policy_resource_aval_list:
+				match = 0
+				for aval in resource_details:
+					if aval.resource_attribute_id==policy_aval.resource_attribute_id and aval.resource_val==policy_aval.resource_val:
+						match += 1
+				if match > 0:
+					resource_aval_valid += 1
+			for policy_aval in policy_env_aval_list:
+				required = bool(int(policy_aval.env_val))
+				match policy_aval.env_attribute_id:
+					case 1:
+						env_aval_valid += (1 if not required or now.weekday() < 5 else 0)
+					case 2:
+						env_aval_valid += (1 if not required or (now.weekday() < 5 and now.hour >= 8 and now.hour < 17) else 0)
+					case 3:
+						env_aval_valid += (1 if not required or otp_matched else 0)
+				# env_aval_valid += check(policy_aval.env_attribute_id, policy_aval.env_val)
+
+
+			if 	user_aval_valid == len(policy_user_aval_list) and \
+					resource_aval_valid == len(policy_resource_aval_list) and \
+						env_aval_valid == len(policy_env_aval_list):
+				allowed_operations[policy.operation_id] = policy.operation_name
+		''' old policy check code
 		for policy in policy_list:
 			valid = 0
 			for aval in user_details:
@@ -492,8 +568,8 @@ def access_resource_user():
 
 			if valid == 3:
 				allowed_operations[policy.operation_id] = policy.operation_name
+		'''
 
-		# issue : multiple allowed operations
 		# entry in Logs table
 		# orgs = Org.query.all()
 		# for org in orgs:
@@ -507,14 +583,17 @@ def access_resource_user():
 		
 		message = ''
 		if len(allowed_operations) > 0:		# i.e. is not empty
-			message = 'Operations allowed on \'' + resource.resource_name + '\' = '
+			message += 'Operations allowed on \'' + resource.resource_name + '\' = '
 			for key in sorted(allowed_operations):
-				message += '\'' + allowed_operations[key] + '\''
+				message += '\'' + allowed_operations[key] + '\' , '
+			while message[-1] != '\'':
+				message = message[:-1]
 			log.decision = 'y'	# update decision in current log object
 			log.operation_id = sorted(allowed_operations.keys())[0]
 		else:
 			message = 'Sorry, you are not allowed to access \'' + resource.resource_name + '\''
 
+		''' logging code
 		db.session.add(log)
 		db.session.commit()
 		# entries in Logs_user_aval table
@@ -531,8 +610,11 @@ def access_resource_user():
 		db.session.add(Logs_env(log_no=log_no, env_attribute_id=time_env_id, env_val=env['time']))
 
 		db.session.commit()
+		'''
 
-		return render_template('access_resource_user.html', resources=resources, message=message, user_name=user_name)
+		end_time = datetime.datetime.now() #time.time()
+		execution_time = (end_time - start_time).microseconds / 1000000.0
+		return render_template('access_resource_user.html', resources=resources, message=message, user_name=user_name, execution_time=execution_time, user_aval=user_data)
 
 	return render_template('access_resource_user.html', resources=resources)
 
@@ -552,6 +634,7 @@ def get_public_key(org_name):
             return words[2]
     return None
 
+# digital signature libs and funcs
 import nacl.utils
 from nacl.public import PrivateKey, PublicKey, Box
 from nacl.encoding import Base64Encoder
@@ -572,7 +655,12 @@ def decrypt_for_user(receiver_private:str, sender_public:str, message:str) -> st
     receiver_box = Box(receiver_private, sender_public)
     return receiver_box.decrypt(base64.b64decode(message.encode('utf-8'))).decode('utf-8')
 
+# importing ontology query python functions
 from .owlquery import *
+
+# getting execution time
+# start_time = time.time()
+# print("--- %s seconds ---" % (time.time() - start_time))
 
 @app.route('/access_resource_non_user', methods=['GET', 'POST'])
 def access_resource_non_user():
@@ -582,8 +670,8 @@ def access_resource_non_user():
 
 	if request.method == "POST":
 		print('Access request non user', file=sys.stderr, flush=True)
+		start_time = datetime.datetime.now()
 
-		user_details = []
 		org_name = ''
 		digital_signature = request.files['digital_signature']
 		filename = secure_filename(digital_signature.filename)
@@ -596,121 +684,111 @@ def access_resource_non_user():
 		receiver_private = get_private_key('IIT Kharagpur')
 		# print('sender_public = ' + sender_public)
 		# print('receiver_private = ' + receiver_private)
-		decrypted_data = decrypt_for_user(receiver_private, sender_public, encrypted_data)
+		decrypted_data = None
+		try:
+			decrypted_data = decrypt_for_user(receiver_private, sender_public, encrypted_data)
+		except:
+			message = 'Access denied: Digital signature could not be verified'
+			return render_template('access_resource_non_user.html', resources=resources, orgs=orgs, message=message)
+
 
 		# for each max_distance, cartesian product : list of aval dicts
 		user_details = [[]]
 		# distance = 0
-		for line in decrypted_data.split('\n'):
-			name, val = line.split(':')
-			id = User_attributes.query.filter_by(user_attribute=name).first().user_attribute_id
-			user_details[0].append({ 'user_attribute_id': tuple([ id ]), 'user_val': [val] })
-			print('distance = 0, aval = ');print({ 'user_attributes': name, 'user_attribute_id': tuple([ id ]), 'user_val': [val] });
-
-		# distance 1 to 5
+		# for line in decrypted_data.split('\n'):
+		# 	name, val = line.split(':')
+		# 	id = User_attributes.query.filter_by(user_attribute=name).first().user_attribute_id
+		# 	user_details[0].append({ 'user_attribute_id': tuple([ id ]), 'user_val': [val] })
+		# 	print('distance = 0, aval = ');print({ 'user_attributes': name, 'user_attribute_id': tuple([ id ]), 'user_val': [val] });
+		max_distance = 3
 		runQuery = SparqlQueries()
-		for max_distance in range(3, 4):
-			detail_list = []
-			aval_list = []
-			for line in decrypted_data.split('\n'):
-				print('line = ' + line)
-				attr_name, val = line.split(':')
-				# id = User_attributes.query.filter_by(user_attribute=attr_name).first().user_attribute_id
-				attr_name_list = runQuery.distance_search(attr_name, max_distance)	# list cant be key of dict
-				attr_id_list = []
-				for elem in attr_name_list:
-					id = User_attributes.query.filter_by(user_attribute=elem).first()
-					if id is not None:
-						attr_id_list.append(id.user_attribute_id)
-				attr_id_list = tuple(attr_id_list)
-				val_list = runQuery.distance_search(val, max_distance)
-				aval_list.append({ 'user_attribute_id': attr_id_list, 'user_val': val_list })
-				print('distance = ' + str(max_distance)+', aval = ');print({ 'user_attributes': attr_name_list, 'user_attribute_id': attr_id_list, 'user_val': val_list });
-
-			user_details.append(aval_list)
-		# print('user_details = '); print(user_details);
+		detail_list = []
+		user_aval_list = []
+		for line in decrypted_data.split('\n'):
+			attr_name, val = line.split(':')
+			attr_name_list = runQuery.distance_search(attr_name, 0)	# list cant be key of dict
+			attr_id_list = []
+			for elem in attr_name_list:
+				id = User_attributes.query.filter_by(user_attribute=elem).first()
+				if id is not None:
+					attr_id_list.append(id.user_attribute_id)
+			attr_id_list = tuple(attr_id_list)
+			# val_list = runQuery.ancestor_search(val)
+			val_list = list(set(runQuery.ancestor_search(val) + \
+								runQuery.descendant_search(val) + \
+								runQuery.distance_search(val, max_distance)))
+			user_aval_list.append({ 'user_attribute_id': attr_id_list, 'user_val': val_list })
+			# print('user aval = ');print({ 'user_attributes': attr_name_list, 'user_attribute_id': attr_id_list, 'user_val': val_list });
 
 		resource_id = request.form['resource_id']
 		resource = Resource.query.filter_by(resource_id=resource_id).first()
 		resource_details = Resource_details.query.filter_by(resource_id=resource_id).all()
 
-		policy_list = Policy.query.join(Operations).filter(Policy.operation_id == Operations.operation_id) \
-					 .outerjoin(Policy_user_aval, Policy.policy_id == Policy_user_aval.policy_id) \
-					 .outerjoin(Policy_resource_aval, Policy.policy_id == Policy_resource_aval.policy_id) \
-					 .outerjoin(Policy_env_aval, Policy.policy_id == Policy_env_aval.policy_id) \
-					 .with_entities(Policy.policy_id, Operations.operation_id, Operations.operation_name, \
-									Policy_user_aval.user_attribute_id, Policy_user_aval.user_val, \
-									Policy_resource_aval.resource_attribute_id, Policy_resource_aval.resource_val, \
-									Policy_env_aval.env_attribute_id, Policy_env_aval.env_val) \
-					 .all()
-		# ONTOLOGY kabaad start
 		message = ''
-		for distance in range(len(user_details)):
-			allowed_operations = dict()		# operation_id : operation_name
-			aval_list = user_details[distance]
-			match = {}
-			valid = 0
-			count = {}
-			# for policy in policy_list:
-			# 	# valid = 0
-			# 	print('distance = ' + str(distance)+', policy = '); print(policy);
-			# 	for aval in aval_list:
-			# 		print('distance = ' + str(distance)+', aval = ');print(aval);
-			# 		if policy.user_attribute_id in aval['user_attribute_id'] and policy.user_val in aval['user_val']:
-			# 			# valid += 1
-			# 	for aval in resource_details:
-			# 		print('distance = ' + str(distance)+', aval = ');print(aval);
-			# 		if aval.resource_attribute_id==policy.resource_attribute_id and aval.resource_val==policy.resource_val:
-			# 			# valid += 1
-			# 	# valid += check_env(policy.env_attribute_id, policy.env_val)		#Env avals
+		message = 'Max mapping distance = ' + str(max_distance) + '\n\n'
 
-			policies = Policy.query.join(Operations, Operations.operation_id==Policy.operation_id) \
-						.with_entities(Policy.policy_id, Operations.operation_id, Operations.operation_name).all()
-			# for policy in policies:
-			# 	print('policy = ', end=' ')
-			# 	print(policy)
-			for policy in policies:
-				# print(policy)
-				policy_user_aval_list = Policy_user_aval.query.filter_by(policy_id=policy.policy_id).all()
-				policy_resource_aval_list = Policy_resource_aval.query.filter_by(policy_id=policy.policy_id).all()
-				policy_env_aval_list = Policy_env_aval.query.filter_by(policy_id=policy.policy_id).all()
-				user_aval_valid = 0
-				resource_aval_valid = 0
-				env_aval_valid = 0
-				for policy_aval in policy_user_aval_list:
-					match = 0
-					for aval in aval_list:
-						if policy_aval.user_attribute_id in aval['user_attribute_id'] and policy_aval.user_val in aval['user_val']:
-							match += 1
-					if match > 0:
-						user_aval_valid += 1
-				for policy_aval in policy_resource_aval_list:
-					match = 0
-					for aval in resource_details:
-						if aval.resource_attribute_id==policy_aval.resource_attribute_id and aval.resource_val==policy_aval.resource_val:
-							match += 1
-					if match > 0:
-						resource_aval_valid += 1
+		allowed_operations = dict()		# operation_id : operation_name
+
+		policies = Policy.query.join(Operations, Operations.operation_id==Policy.operation_id) \
+					.with_entities(Policy.policy_id, Operations.operation_id, Operations.operation_name).all()
+		# for policy in policies:
+		# 	print('policy = ', end=' ');	print(policy);
+		for policy in policies:
+			policy_user_aval_list = Policy_user_aval.query.filter_by(policy_id=policy.policy_id).all()
+			policy_resource_aval_list = Policy_resource_aval.query.filter_by(policy_id=policy.policy_id).all()
+			policy_env_aval_list = Policy_env_aval.query.filter_by(policy_id=policy.policy_id).all()
+			user_aval_valid = 0
+			resource_aval_valid = 0
+			env_aval_valid = 0
+			for policy_aval in policy_user_aval_list:
+				match = 0
+				for aval in user_aval_list:
+					# print('policy_aval.user_val = ' + policy_aval.user_val + 'aval[\'user_val\'] = ',end=' ')
+					# print(aval['user_val'])
+					if policy_aval.user_val in aval['user_val']: #and policy_aval.user_attribute_id in aval['user_attribute_id'] 
+						match += 1
+				if match > 0:
+					user_aval_valid += 1
+				# print('policy_aval = ',end=''); print(policy_aval); print('match = ' + str(match));
+			for policy_aval in policy_resource_aval_list:
+				match = 0
+				for aval in resource_details:
+					if aval.resource_attribute_id==policy_aval.resource_attribute_id and aval.resource_val==policy_aval.resource_val:
+						match += 1
+				if match > 0:
+					resource_aval_valid += 1
+			for policy_aval in policy_env_aval_list:
+				required = bool(int(policy_aval.env_val))
+				match policy_aval.env_attribute_id:
+					case 1:
+						env_aval_valid += (1 if not required or now.weekday() < 5 else 0)
+					case 2:
+						env_aval_valid += (1 if not required or (now.weekday() < 5 and now.hour >= 8 and now.hour < 17) else 0)
+					case 3:
+						env_aval_valid += (1 if not required else 0)
 
 
-				if user_aval_valid == len(policy_user_aval_list) and resource_aval_valid == len(policy_resource_aval_list):
-					allowed_operations[policy.operation_id] = policy.operation_name
 
-			message += '\n\nFor allowed distance = ' + str(distance) + '\n\t'
-			# if distance == 0:
-				# message = 'Sorry, you are not allowed to access \'galvin.pdf\''
-			if len(allowed_operations) > 0:		# i.e. is not empty
-				message += 'Operations possible on \'' + resource.resource_name + '\' = '
-				for key in sorted(allowed_operations):
-					message += '\'' + allowed_operations[key] + '\''
-			else:
-				message += 'Sorry, you are not allowed to access \'' + resource.resource_name + '\''
-# 		message = 'For allowed distance = 0\n\t \
-# Sorry, you are not allowed to access \'digital_electronics.pdf\' \n\n\
-# For allowed distance = 1\n\t \
-# Sorry, you are not allowed to access \'digital_electronics.pdf\' \n\n\
-# For allowed distance = 2\n\t \
-# Operations possible on \'digital_electronics.pdf\' = \'read\''
+			if 	user_aval_valid == len(policy_user_aval_list) and \
+					resource_aval_valid == len(policy_resource_aval_list) and \
+						env_aval_valid == len(policy_env_aval_list):
+				allowed_operations[policy.operation_id] = policy.operation_name
+
+		# message += '\n\n(ancestral heirarchy)\n\t'
+		# if distance == 0:
+			# message = 'Sorry, you are not allowed to access \'galvin.pdf\''
+		if len(allowed_operations) > 0:		# i.e. is not empty
+			message += 'Operations possible on \'' + resource.resource_name + '\' = '
+			for key in sorted(allowed_operations):
+				message += '\'' + allowed_operations[key] + '\' , '
+			while message[-1] != '\'':
+				message = message[:-1]
+			# message += ', \'append\''
+		else:
+			message += 'Sorry, you are not allowed to access \'' + resource.resource_name + '\''
+
+		end_time = datetime.datetime.now()
+		execution_time = (end_time - start_time).microseconds / 1000000.0
 		print('message = \n' + message)
 
 		# ONTOLOGY kabaad end
@@ -730,7 +808,7 @@ def access_resource_non_user():
 		# 	if valid == 3:
 		# 		allowed_operations[policy.operation_id] = policy.operation_name
 
-		# IMP: ENTRIES IN LOG TAB:E
+		# IMP: ENTRIES IN LOG TABLE
 
 		# # entry in Logs table
 		# log_no = db.session.query(func.max(Logs.log_no)).scalar()
@@ -764,9 +842,187 @@ def access_resource_non_user():
 		
 		# db.session.commit()
 
-		return render_template('access_resource_non_user.html', resources=resources, orgs=orgs, message=message)
+		return render_template('access_resource_non_user.html', resources=resources, orgs=orgs, message=message, user_aval=decrypted_data, execution_time=execution_time)
 
 	return render_template('access_resource_non_user.html', resources=resources, orgs=orgs)
+
+from flask import g
+
+@app.before_request
+def before_request():
+    g.start = time.time()
+
+@app.after_request
+def after_request(response):
+    diff = time.time() - g.start
+    print(str(diff))
+    if (response.response and 200 <= response.status_code < 300):
+        response.set_data(response.get_data().replace(b'__EXECUTION_TIME__', bytes(str(diff), 'utf-8')))
+    return response
+
+def insert_users(num_users, num_user_aval):
+	offset = 100 # ids start from offset
+	for i in range(num_users):
+		user_id = offset + i
+		user = User(user_id=user_id, user_name='user_name'+str(user_id), login_name='login_name'+str(user_id), email=str(user_id)+'@gmail.com')
+		user.set_password('password' + str(user_id))
+		db.session.add(user)
+		for j in range(num_user_aval):
+			user_detail = User_details(user_id=user_id,user_attribute_id=offset + j,user_val='userval'+str(j))
+			db.session.add(user_detail)
+	db.session.commit()
+	print('users insertion done')
+def insert_resources(num_resources, num_resource_aval):
+	offset = 100 # ids start from offset
+	for i in range(num_resources):
+		resource_id = offset + i
+		resource = Resource(resource_id=resource_id, resource_name='resource_name'+str(resource_id))
+		db.session.add(resource)
+		for j in range(num_resource_aval):
+			resource_detail = Resource_details(resource_id=resource_id, \
+								resource_attribute_id=offset + j,resource_val='resource_val'+str(j))
+			db.session.add(resource_detail)
+	db.session.commit()
+	print('resources insertion done')
+def insert_rules(num_rules, num_rule_aval):
+	offset = 100 # ids start from offset
+	for i in range(num_rules):
+		policy_id = offset + i
+		policy = Policy(policy_id=policy_id, operation_id=5)
+		db.session.add(policy)
+		for j in range(num_rule_aval):
+			policy_user_aval = Policy_user_aval(policy_id=policy_id, user_attribute_id=offset+j, user_val='user_val'+str(j))
+			db.session.add(policy_user_aval)
+			policy_resource_aval = Policy_resource_aval(policy_id=policy_id, resource_attribute_id=offset+j, resource_val='resource_val'+str(j))
+			db.session.add(policy_resource_aval)
+			policy_env_aval = Policy_env_aval(policy_id=policy_id, env_attribute_id=offset+j, env_val='env_val'+str(j))
+			db.session.add(policy_env_aval)
+	db.session.commit()
+	print('rules insertion done')
+
+def delete_users(num_users, num_user_aval):
+	offset = 100 # ids start from offset
+	for i in range(num_users):
+		user_id = offset + i
+		User.query.filter_by(user_id=user_id).delete()
+		for j in range(num_user_aval):
+			User_details.query.filter_by(user_id=user_id,user_attribute_id=offset + j,user_val='userval'+str(j)).delete()
+	db.session.commit()
+	print('users deletion done')
+def delete_resources(num_resources, num_resource_aval):
+	offset = 100 # ids start from offset
+	for i in range(num_resources):
+		resource_id = offset + i
+		Resource.query.filter_by(resource_id=resource_id, resource_name='resource_name'+str(resource_id)).delete()
+		for j in range(num_resource_aval):
+			Resource_details.query.filter_by(resource_id=resource_id, resource_attribute_id=offset + j,resource_val='resource_val'+str(j)).delete()
+	db.session.commit()
+	print('resources deletion done')
+def delete_rules(num_rules, num_rule_aval):
+	offset = 100 # ids start from offset
+	for i in range(num_rules):
+		policy_id = offset + i
+		Policy.query.filter_by(policy_id=policy_id, operation_id=5).delete()
+		for j in range(num_rule_aval):
+			Policy_user_aval.query.filter_by(policy_id=policy_id, user_attribute_id=offset+j, user_val='user_val'+str(j)).delete()
+			Policy_resource_aval.query.filter_by(policy_id=policy_id, resource_attribute_id=offset+j, resource_val='resource_val'+str(j)).delete()
+			Policy_env_aval.query.filter_by(policy_id=policy_id, env_attribute_id=offset+j, env_val='env_val'+str(j)).delete()
+	db.session.commit()
+	print('rules deletion done')
+
+def run_graph_example(max_distance):
+	user_details = [[]]
+	runQuery = SparqlQueries()
+	detail_list = []
+	user_aval_list = []
+	for line in ['Department:School', 'Designation:Dean'] : # decrypted_data.split('\n'):
+		attr_name, val = line.split(':')
+		attr_name_list = runQuery.distance_search2(attr_name, 0)	# list cant be key of dict
+		attr_id_list = []
+		for elem in attr_name_list:
+			id = User_attributes.query.filter_by(user_attribute=elem).first()
+			if id is not None:
+				attr_id_list.append(id.user_attribute_id)
+		attr_id_list = tuple(attr_id_list)
+		# val_list = runQuery.ancestor_search(val)
+		val_list = list(set(runQuery.ancestor_search(val) + \
+							runQuery.descendant_search(val) + \
+							runQuery.distance_search2(val, max_distance)))
+		user_aval_list.append({ 'user_attribute_id': attr_id_list, 'user_val': val_list })
+		# print('user aval = ');print({ 'user_attributes': attr_name_list, 'user_attribute_id': attr_id_list, 'user_val': val_list });
+
+	resource_id = 5 #Mechanics.pdf
+	resource = Resource.query.filter_by(resource_id=resource_id).first()
+	resource_details = Resource_details.query.filter_by(resource_id=resource_id).all()
+
+	allowed_operations = dict()		# operation_id : operation_name
+
+	policies = Policy.query.join(Operations, Operations.operation_id==Policy.operation_id) \
+				.with_entities(Policy.policy_id, Operations.operation_id, Operations.operation_name).all()
+	# for policy in policies:
+	# 	print('policy = ', end=' ');	print(policy);
+	for policy in policies:
+		policy_user_aval_list = Policy_user_aval.query.filter_by(policy_id=policy.policy_id).all()
+		policy_resource_aval_list = Policy_resource_aval.query.filter_by(policy_id=policy.policy_id).all()
+		policy_env_aval_list = Policy_env_aval.query.filter_by(policy_id=policy.policy_id).all()
+		user_aval_valid = 0
+		resource_aval_valid = 0
+		env_aval_valid = 0
+		for policy_aval in policy_user_aval_list:
+			match = 0
+			for aval in user_aval_list:
+				# print('policy_aval.user_val = ' + policy_aval.user_val + 'aval[\'user_val\'] = ',end=' ')
+				# print(aval['user_val'])
+				if policy_aval.user_val in aval['user_val']: #and policy_aval.user_attribute_id in aval['user_attribute_id'] 
+					match += 1
+			if match > 0:
+				user_aval_valid += 1
+			# print('policy_aval = ',end=''); print(policy_aval); print('match = ' + str(match));
+		for policy_aval in policy_resource_aval_list:
+			match = 0
+			for aval in resource_details:
+				if aval.resource_attribute_id==policy_aval.resource_attribute_id and aval.resource_val==policy_aval.resource_val:
+					match += 1
+			if match > 0:
+				resource_aval_valid += 1
+		for policy_aval in policy_env_aval_list:
+			required = bool(int(policy_aval.env_val))
+			match policy_aval.env_attribute_id:
+				case 1:
+					env_aval_valid += (1 if not required or now.weekday() < 5 else 0)
+				case 2:
+					env_aval_valid += (1 if not required or (now.weekday() < 5 and now.hour >= 8 and now.hour < 17) else 0)
+				case 3:
+					env_aval_valid += (1 if not required else 0)
+
+		if 	user_aval_valid == len(policy_user_aval_list) and \
+				resource_aval_valid == len(policy_resource_aval_list) and \
+					env_aval_valid == len(policy_env_aval_list):
+			allowed_operations[policy.operation_id] = policy.operation_name
+
+@app.route('/graph/<int:max_distance>/<int:num_users>/<int:num_user_aval>/<int:num_resources>/<int:num_resource_aval>/<int:num_rules>/<int:num_rule_aval>', methods=['GET', 'POST'])
+def graph(max_distance, num_users, num_user_aval, num_resources, num_resource_aval, num_rules, num_rule_aval):
+	# offset = 100 # ids start from offset
+	# adding dummy data in database
+	# insert_users(num_users, num_user_aval)
+	# insert_resources(num_resources, num_resource_aval)
+	# insert_rules(num_rules, num_rule_aval)
+
+	start_time = datetime.datetime.now()
+
+	# evaluating non_user based access request
+	run_graph_example(max_distance)
+
+	end_time = datetime.datetime.now()
+	execution_time = (end_time - start_time)#.microseconds / 1000000.0
+
+	# # removing dummy data from database
+	delete_users(num_users, num_user_aval)
+	delete_resources(num_resources, num_resource_aval)
+	delete_rules(num_rules, num_rule_aval)
+
+	message = str(execution_time) + 's'
+	return message
 
 
 @app.route('/view_resources')

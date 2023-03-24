@@ -2,11 +2,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy 
 from flask_login import LoginManager
 import os
+from btp_abac_heirarchy.n_ary_poltree.data_generator_new import *
+from btp_abac_heirarchy.n_ary_poltree.poltree_generator import *
+from btp_abac_heirarchy.n_ary_poltree.poltree_resolve import *
 #from flask.ext.session import Session
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '1234'
-app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/btp'
+# app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/btp'
+app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:root@localhost/duplicatebtp'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(__file__), 'uploads/')
 app.config['MAX_CONTENT_PATH'] = 100000000
