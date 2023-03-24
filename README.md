@@ -1,5 +1,4 @@
-# Online-Grocery-Store
-DBMS Mini Project for Spring 2020-21
+# Ontology based ABAC, MTP 2022-23
 
 export FLASK_APP=abac.py
 
