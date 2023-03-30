@@ -12,6 +12,12 @@ CREATE TABLE `env_attributes` ( env_attribute_id int PRIMARY KEY, `env_attribute
 CREATE TABLE `resource_attributes` ( resource_attribute_id int PRIMARY KEY, `resource_attribute` varchar(64));
 CREATE TABLE `user_attributes` ( user_attribute_id int PRIMARY KEY, `user_attribute` varchar(64));
 
+-- List of user values
+CREATE TABLE `user_values` ( user_val_id int PRIMARY KEY, `user_val` varchar(64));
+-- INSERT INTO `user_values` 
+-- 	SELECT @rownum := @rownum + 1 AS user_val_id, t.user_val AS `user_val`
+--   FROM (SELECT DISTINCT `user_val` FROM `user_aval` ORDER BY user_attribute_id, user_val) t, (SELECT @rownum := 0) r;
+
 -- List of all valid attribute - value (aval) pairs
 CREATE TABLE `env_aval` ( 
 	env_attribute_id int, `env_val` varchar(64),  

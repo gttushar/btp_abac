@@ -19,6 +19,11 @@ class User_attributes(db.Model):
 	user_attribute_id = db.Column(db.Integer, primary_key=True)
 	user_attribute = db.Column(db.String(64), nullable=False, unique=True)
 
+class User_values(db.Model):
+	__tablename__ = 'user_values'
+	user_val_id = db.Column(db.Integer, primary_key=True)
+	user_val = db.Column(db.String(64), nullable=False, unique=True)
+
 
 class Env_aval(db.Model):
 	__tablename__ = 'env_aval'

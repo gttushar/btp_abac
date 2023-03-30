@@ -7,12 +7,13 @@ from werkzeug.urls import url_parse
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 
-import datetime, sys, os, time, random
+import datetime, sys, os, time, random, json, pickle
 
 from app.forms import *
 from app.models import *
 from app import app
 from app import db
+
 
 @app.route('/')
 def base():
@@ -620,19 +621,19 @@ def access_resource_user():
 
 
 def get_private_key(org_name):
-    file = open(os.path.join(os.path.dirname(__file__), '../private_keys.txt'), 'r+t')
-    for line in file.readlines():
-        words = line.split(':')
-        if words[1] == org_name:
-            return words[3]
-    return None
+	file = open(os.path.join(os.path.dirname(__file__), '../private_keys.txt'), 'r+t')
+	for line in file.readlines():
+		words = line.split(':')
+		if words[1] == org_name:
+			return words[3]
+	return None
 def get_public_key(org_name):
-    file = open(os.path.join(os.path.dirname(__file__), '../private_keys.txt'), 'r+t')
-    for line in file.readlines():
-        words = line.split(':')
-        if words[1] == org_name:
-            return words[2]
-    return None
+	file = open(os.path.join(os.path.dirname(__file__), '../private_keys.txt'), 'r+t')
+	for line in file.readlines():
+		words = line.split(':')
+		if words[1] == org_name:
+			return words[2]
+	return None
 
 # digital signature libs and funcs
 import nacl.utils
@@ -641,19 +642,19 @@ from nacl.encoding import Base64Encoder
 import base64
 
 def base64_to_bytes(key:str) -> bytes: 
-    return base64.b64decode(key.encode('utf-8'))
+	return base64.b64decode(key.encode('utf-8'))
 
 def encrypt_for_user(sender_private:str, receiver_public:str, message:str) -> str: 
-    sender_private = PrivateKey(base64_to_bytes(sender_private))
-    receiver_public = PublicKey(base64_to_bytes(receiver_public))
-    sender_box = Box(sender_private, receiver_public)
-    return base64.b64encode(sender_box.encrypt(bytes(message, "utf-8"))).decode('utf-8')
+	sender_private = PrivateKey(base64_to_bytes(sender_private))
+	receiver_public = PublicKey(base64_to_bytes(receiver_public))
+	sender_box = Box(sender_private, receiver_public)
+	return base64.b64encode(sender_box.encrypt(bytes(message, "utf-8"))).decode('utf-8')
 
 def decrypt_for_user(receiver_private:str, sender_public:str, message:str) -> str: 
-    receiver_private = PrivateKey(base64_to_bytes(receiver_private))
-    sender_public = PublicKey(base64_to_bytes(sender_public))
-    receiver_box = Box(receiver_private, sender_public)
-    return receiver_box.decrypt(base64.b64decode(message.encode('utf-8'))).decode('utf-8')
+	receiver_private = PrivateKey(base64_to_bytes(receiver_private))
+	sender_public = PublicKey(base64_to_bytes(sender_public))
+	receiver_box = Box(receiver_private, sender_public)
+	return receiver_box.decrypt(base64.b64decode(message.encode('utf-8'))).decode('utf-8')
 
 # importing ontology query python functions
 from .owlquery import *
@@ -661,6 +662,11 @@ from .owlquery import *
 # getting execution time
 # start_time = time.time()
 # print("--- %s seconds ---" % (time.time() - start_time))
+from n_ary_poltree import *
+from n_ary_poltree.data_generator_new import *
+from n_ary_poltree.poltree_generator import *
+from n_ary_poltree.poltree_resolve import *
+from app import node_list
 
 @app.route('/access_resource_non_user', methods=['GET', 'POST'])
 def access_resource_non_user():
@@ -700,39 +706,56 @@ def access_resource_non_user():
 		# 	id = User_attributes.query.filter_by(user_attribute=name).first().user_attribute_id
 		# 	user_details[0].append({ 'user_attribute_id': tuple([ id ]), 'user_val': [val] })
 		# 	print('distance = 0, aval = ');print({ 'user_attributes': name, 'user_attribute_id': tuple([ id ]), 'user_val': [val] });
-		max_distance = 3
+		max_distance = 2
 		runQuery = SparqlQueries()
 		detail_list = []
-		user_aval_list = []
+		# user_aval_list = []
+		access_req = {}
 		for line in decrypted_data.split('\n'):
 			attr_name, val = line.split(':')
-			attr_name_list = runQuery.distance_search(attr_name, 0)	# list cant be key of dict
-			attr_id_list = []
-			for elem in attr_name_list:
-				id = User_attributes.query.filter_by(user_attribute=elem).first()
-				if id is not None:
-					attr_id_list.append(id.user_attribute_id)
-			attr_id_list = tuple(attr_id_list)
-			# val_list = runQuery.ancestor_search(val)
+			# attr_name_list = runQuery.distance_search(attr_name, 0)	# list cant be key of dict
+			# attr_id_list = []
+			# for elem in attr_name_list:
+			# 	id = User_attributes.query.filter_by(user_attribute=elem).first()
+			# 	if id is not None:
+			# 		attr_id_list.append('u' + str(id.user_attribute_id))
+			# attr_id_list = tuple(attr_id_list)
+			attr_id = None
+			id = User_attributes.query.filter_by(user_attribute=attr_name).first()
+			if id is not None:
+				attr_id = 'u' + str(id.user_attribute_id)
 			val_list = list(set(runQuery.ancestor_search(val) + \
 								runQuery.descendant_search(val) + \
 								runQuery.distance_search(val, max_distance)))
-			user_aval_list.append({ 'user_attribute_id': attr_id_list, 'user_val': val_list })
+			print('val_list = ', val_list)
+			val_query = User_values.query.filter(User_values.user_val.in_(val_list)).with_entities(User_values.user_val_id).all()
+			val_id_list = [row.user_val_id for row in val_query]
+			# user_aval_list.append({ 'user_attribute_id': attr_id, 'user_val': val_list })
+			access_req[attr_id] = val_id_list
 			# print('user aval = ');print({ 'user_attributes': attr_name_list, 'user_attribute_id': attr_id_list, 'user_val': val_list });
+		print('access_req = ', access_req)
 
 		resource_id = request.form['resource_id']
 		resource = Resource.query.filter_by(resource_id=resource_id).first()
 		resource_details = Resource_details.query.filter_by(resource_id=resource_id).all()
 
+		op = int(request.form["operation"])
+		access_req["op"] = op
+
+		# infile = open("n_ary_poltree/poltree.pkl","rb")
+		# node_list = pickle.load(infile)
+		decision = poltree_resolve.n_ary_resolve_any(node_list[0], access_req, node_list)
+		print('decision = ', decision)
+
 		message = ''
 		message = 'Max mapping distance = ' + str(max_distance) + '\n\n'
 
-		allowed_operations = dict()		# operation_id : operation_name
 
+		''' Brute force implementation, without using Poltree
+		allowed_operations = dict()		# operation_id : operation_name
 		policies = Policy.query.join(Operations, Operations.operation_id==Policy.operation_id) \
 					.with_entities(Policy.policy_id, Operations.operation_id, Operations.operation_name).all()
-		# for policy in policies:
-		# 	print('policy = ', end=' ');	print(policy);
+		# for policy in policies: print('policy = ', end=' ');	print(policy);
 		for policy in policies:
 			policy_user_aval_list = Policy_user_aval.query.filter_by(policy_id=policy.policy_id).all()
 			policy_resource_aval_list = Policy_resource_aval.query.filter_by(policy_id=policy.policy_id).all()
@@ -774,16 +797,15 @@ def access_resource_non_user():
 						env_aval_valid == len(policy_env_aval_list):
 				allowed_operations[policy.operation_id] = policy.operation_name
 
-		# message += '\n\n(ancestral heirarchy)\n\t'
-		# if distance == 0:
-			# message = 'Sorry, you are not allowed to access \'galvin.pdf\''
+
 		if len(allowed_operations) > 0:		# i.e. is not empty
 			message += 'Operations possible on \'' + resource.resource_name + '\' = '
 			for key in sorted(allowed_operations):
 				message += '\'' + allowed_operations[key] + '\' , '
-			while message[-1] != '\'':
-				message = message[:-1]
-			# message += ', \'append\''
+			while message[-1] != '\'': message = message[:-1]
+		'''
+		if decision == 'allow':
+			message += 'Access allowed !'
 		else:
 			message += 'Sorry, you are not allowed to access \'' + resource.resource_name + '\''
 
@@ -850,15 +872,15 @@ from flask import g
 
 @app.before_request
 def before_request():
-    g.start = time.time()
+	g.start = time.time()
 
 @app.after_request
 def after_request(response):
-    diff = time.time() - g.start
-    print(str(diff))
-    if (response.response and 200 <= response.status_code < 300):
-        response.set_data(response.get_data().replace(b'__EXECUTION_TIME__', bytes(str(diff), 'utf-8')))
-    return response
+	diff = time.time() - g.start
+	print(str(diff))
+	if (response.response and 200 <= response.status_code < 300):
+		response.set_data(response.get_data().replace(b'__EXECUTION_TIME__', bytes(str(diff), 'utf-8')))
+	return response
 
 def insert_users(num_users, num_user_aval):
 	offset = 100 # ids start from offset

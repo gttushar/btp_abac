@@ -1,10 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy 
 from flask_login import LoginManager
-import os
-from btp_abac_heirarchy.n_ary_poltree.data_generator_new import *
-from btp_abac_heirarchy.n_ary_poltree.poltree_generator import *
-from btp_abac_heirarchy.n_ary_poltree.poltree_resolve import *
+import os, pickle
 #from flask.ext.session import Session
 
 app = Flask(__name__)
@@ -20,6 +17,16 @@ app.config['MAX_CONTENT_PATH'] = 100000000
 db=SQLAlchemy(app)
 login=LoginManager(app)
 login.login_view='login'
+
+# poltree loading and store on server
+from n_ary_poltree import poltree_generator
+from n_ary_poltree.poltree_generator import node
+# loading poltree from pickle file
+poltree_generator.generator(True)
+infile = open("n_ary_poltree/poltree.pkl","rb")
+node_list = pickle.load(infile)
+
+
 
 from app import routes,models
 from app.models import *

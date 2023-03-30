@@ -24,12 +24,14 @@ def n_ary_resolve_any(curnode, access_req, node_list):
     i=0
     decision='deny'
     for value in curnode.value_list:
-        if value==access_req[curnode.attrib]:
-            decision=n_ary_resolve_any(node_list[curnode.children[i]],access_req)
+        if curnode.attrib in access_req and \
+         ((isinstance(access_req[curnode.attrib], list) and value in access_req[curnode.attrib]) \
+          or value==access_req[curnode.attrib]):
+            decision=n_ary_resolve_any(node_list[curnode.children[i]],access_req,node_list)
             if decision=='allow':
                 return 'allow'
         elif value==0:
-            decision=n_ary_resolve_any(node_list[curnode.children[i]],access_req)
+            decision=n_ary_resolve_any(node_list[curnode.children[i]],access_req,node_list)
             if decision=='allow':
                 return 'allow'
         i+=1
@@ -51,6 +53,7 @@ def resolve():
     totalTimeAllowed = 0
     totalTimeDenied = 0
     for req in req_list:
+        # print('req = ', req)
         start=time.time()
         dec=n_ary_resolve_any(node_list[0],req, node_list)
         end=time.time()
@@ -62,10 +65,17 @@ def resolve():
             totalTimeDenied += end-start
             ndenied += 1
 
-    avgTimeAllowed = totalTimeAllowed/nallowed
-    avgTimeDenied = totalTimeDenied/ndenied
+    avgTimeAllowed = -1
+    if nallowed > 0:
+        avgTimeAllowed = totalTimeAllowed/nallowed
+    avgTimeDenied = -1
+    if ndenied > 0:
+        avgTimeDenied = totalTimeDenied/ndenied
     avgTime = (totalTimeAllowed + totalTimeDenied)/(nallowed + ndenied)
     list1 = [avgTimeAllowed, avgTimeDenied, avgTime]
     json.dump(list1, resultsfile, indent = 4)
     json.dump(reslist, outfile, indent = 4)
+    print(reslist)
 
+if __name__ == '__main__':
+    resolve()

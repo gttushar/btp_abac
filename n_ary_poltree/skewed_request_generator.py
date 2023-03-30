@@ -43,7 +43,7 @@ req_list=[]
 for i in range(0,nquery):
     j=random.randint(1,10)
     req=dict()
-    print(j)
+    # print(j)
     if j<8:
         k=random.randint(0,np-1)
         while len(entity_sets[k].user_list)==0 or len(entity_sets[k].obj_list)==0 or len(entity_sets[k].env_list)==0:

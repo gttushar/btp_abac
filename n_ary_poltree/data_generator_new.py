@@ -21,17 +21,30 @@ def check_dup_policy(policy_list, policy):
     return 0
 
 def generate_data():
-    nu = 5000 #int(input("Enter no. of users:"))
-    no = 25000 #int(input("Enter no. of objects:"))
-    ne = 20 #int(input("Enter no. of environment entities:"))
-    ua = 50 #int(input("Enter no. of user attributes:"))
-    oa = 50 #int(input("Enter no. of object attributes:"))
+    # OG values
+    # nu = 5000 #int(input("Enter no. of users:"))
+    # no = 25000 #int(input("Enter no. of objects:"))
+    # ne = 20 #int(input("Enter no. of environment entities:"))
+    # ua = 50 #int(input("Enter no. of user attributes:"))
+    # oa = 50 #int(input("Enter no. of object attributes:"))
+    # ea = 10 #int(input("Enter no. of environment attributes:"))
+    # nvu = 100 #int(input("Enter no. of values of user attributes:"))
+    # nvo = 100 #int(input("Enter no. of values of objects attributes:"))
+    # nve = 10 #int(input("Enter no. of values of env attributes:"))
+    # np = int(input("Enter no. of policies:"))
+    #nops = 20 #int(input("Enter no. of ops:"))
+
+    nu = 10 #int(input("Enter no. of users:"))
+    no = 10 #int(input("Enter no. of objects:"))
+    ne = 10 #int(input("Enter no. of environment entities:"))
+    ua = 10 #int(input("Enter no. of user attributes:"))
+    oa = 10 #int(input("Enter no. of object attributes:"))
     ea = 10 #int(input("Enter no. of environment attributes:"))
     nvu = 100 #int(input("Enter no. of values of user attributes:"))
     nvo = 100 #int(input("Enter no. of values of objects attributes:"))
     nve = 10 #int(input("Enter no. of values of env attributes:"))
     np = int(input("Enter no. of policies:"))
-    nops = 20 #int(input("Enter no. of ops:"))
+    nops = 10 #int(input("Enter no. of ops:"))
 
     # Building random policies
     print("Generating random policies...")
@@ -146,4 +159,5 @@ def generate_data():
     # dumping the entity sets of each policy into a file
     pickle.dump(entity_sets, entity_set_file, -1)
 
-generate_data()
+if __name__ == '__main__':
+    generate_data()

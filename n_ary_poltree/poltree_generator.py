@@ -175,11 +175,21 @@ def gen_poltree(avp_list,attrib_set,pol_list,entities):
     #print('Exiting node with max attribute '+max_attrib)
     return curnode.id
 
-def generator():
-    users_file=open("users.txt","r")
-    objects_file=open("objects.txt","r")
-    env_file=open("env.txt","r")
-    pol_file=open("policies.txt","r")
+def generator(flask_app = False):
+    users_file = None
+    objects_file = None
+    env_file = None
+    pol_file = None
+    if flask_app:
+        users_file=open("n_ary_poltree/users.txt","r")
+        objects_file=open("n_ary_poltree/objects.txt","r")
+        env_file=open("n_ary_poltree/env.txt","r")
+        pol_file=open("n_ary_poltree/policies.txt","r")
+    else:
+        users_file=open("users.txt","r")
+        objects_file=open("objects.txt","r")
+        env_file=open("env.txt","r")
+        pol_file=open("policies.txt","r")
 
     str1=users_file.readline()
     words=str1.split()
@@ -239,6 +249,13 @@ def generator():
     # loading list of policies from json file
     policies=json.load(pol_file)
 
+    # added by Tushar    
+    for i in range(0,np):
+        for j in policies[i]:
+            if [j,policies[i][j]] not in avp_list:
+                avp_list.append([j,policies[i][j]])
+    # end added
+    
     attrib_set=set()
     for i in range(0,ua):
         attrib_set.add('u'+str(i+1))
@@ -253,7 +270,12 @@ def generator():
     entities.env_list=env_list
 
     gen_poltree(avp_list,attrib_set,policies,entities)
-    print(len(node_list))
-    outfile=open("poltree.pkl","wb")
+    # print(len(node_list))
+    if flask_app:
+        outfile=open("n_ary_poltree/poltree.pkl","wb")
+    else:
+        outfile=open("poltree.pkl","wb")
     pickle.dump(node_list,outfile,-1)
 
+if __name__ == '__main__':
+    generator()
